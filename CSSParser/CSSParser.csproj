@@ -9,4 +9,10 @@
     <Folder Include="assets\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="assets\styles.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
