@@ -15,6 +15,8 @@ namespace CSSParser {
             string source = File.ReadAllText(StylesPath, Encoding.UTF8);
             List<StyleRule> rules = CSSParser.Parse(source);
 
+            Printer.PrintRules(rules);
+
             Console.ReadLine();
         }
     }

@@ -36,13 +36,10 @@ namespace CSSParser {
                         property = property.Trim().ToLower();
                         value = value.Trim();
 
-                        if (property == "background-color") {
-                            rule.Style.BackgroundColor = value;
-                        } else if (property == "height") {
-                            rule.Style.Height = value;
-                        } else if (property == "width") {
-                            rule.Style.Width = value;
-                        }
+                        rule.Style.Add(new CSSValue() {
+                            Property = property,
+                            Value = value,
+                        });
 
                         property = "";
                         value = "";
