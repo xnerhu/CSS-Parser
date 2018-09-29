@@ -15,8 +15,10 @@ namespace CSSParser {
             for (int i = 0; i < source.Length; i++) {
                 if (source[i] == '{') {
                     rule.SelectorText = rule.SelectorText.Trim();
+                    rule.CssText += rule.SelectorText + " { ";
                     insideBrackets = true;
                 } else if (source[i] == '}') {
+                    rule.CssText += '}';
                     rules.Add(rule);
 
                     rule = new StyleRule();
@@ -28,6 +30,8 @@ namespace CSSParser {
                     } else if (source[i] == ';') {
                         declaration.Property = declaration.Property.Trim();
                         declaration.Value = declaration.Value.Trim();
+
+                        rule.CssText += string.Format("{0}: {1}; ", declaration.Property, declaration.Value);
                         rule.Style.Add(declaration);
 
                         declaration = new StyleDeclaration();

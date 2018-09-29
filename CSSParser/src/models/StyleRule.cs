@@ -5,6 +5,5 @@ namespace CSSParser {
         public string CssText;
         public string SelectorText;
         public List<StyleDeclaration> Style = new List<StyleDeclaration>();
-        public RuleType Type;
     }
 }
