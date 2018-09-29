@@ -1,57 +1,46 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace CSSParser {
     public static class CSSParser {
+        /// <summary>
+        /// Parses source code into a list of style-rules
+        /// </summary>
         public static List<StyleRule> Parse(string source) {
             List<StyleRule> rules = new List<StyleRule>();
+            StyleRule rule = new StyleRule();
+            StyleDeclaration declaration = new StyleDeclaration();
             bool insideBrackets = false;
             bool capturingProperty = true;
-            string property = "";
-            string value = "";
-
-            StyleRule rule = new StyleRule();
-  
+           
             for (int i = 0; i < source.Length; i++) {
-                if (source[i] == '{' && !insideBrackets) {
-                    insideBrackets = true;
-                    continue;
-                } else if (source[i] == '}' && insideBrackets) {
+                if (source[i] == '{') {
                     rule.SelectorText = rule.SelectorText.Trim();
-
+                    insideBrackets = true;
+                } else if (source[i] == '}') {
                     rules.Add(rule);
+
                     rule = new StyleRule();
-
                     insideBrackets = false;
-                    break;
-                }
-
-                if (!insideBrackets) {
-                    rule.SelectorText += source[i];
-                } else { 
-                    if (capturingProperty && source[i] == ':') {
+                    capturingProperty = true;
+                } else if (insideBrackets) {
+                    if (source[i] == ':') {
                         capturingProperty = false;
-                        continue;
-                    } else if (!capturingProperty && source[i] == ';') {
-                        property = property.Trim().ToLower();
-                        value = value.Trim();
+                    } else if (source[i] == ';') {
+                        declaration.Property = declaration.Property.Trim();
+                        declaration.Value = declaration.Value.Trim();
+                        rule.Style.Add(declaration);
 
-                        rule.Style.Add(new CSSValue() {
-                            Property = property,
-                            Value = value,
-                        });
-
-                        property = "";
-                        value = "";
+                        declaration = new StyleDeclaration();
                         capturingProperty = true;
-                        continue;
-                    }
-
-                    if (capturingProperty) {
-                        property += source[i];
                     } else {
-                        value += source[i];
+                        if (capturingProperty) {
+                            declaration.Property += source[i];
+                        } else {
+                            declaration.Value += source[i];
+                        }
                     }
+                } else {
+                    rule.SelectorText += source[i];
                 }
             }
 
